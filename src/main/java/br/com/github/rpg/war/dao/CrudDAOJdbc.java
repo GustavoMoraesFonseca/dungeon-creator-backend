@@ -8,7 +8,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import br.com.github.rpg.war.bean.GenericBean;
 import br.com.github.rpg.war.dao.helper.CrudDAOHelper;

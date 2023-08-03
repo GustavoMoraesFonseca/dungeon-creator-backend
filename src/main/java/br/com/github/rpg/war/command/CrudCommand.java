@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import br.com.github.rpg.war.bean.GenericBean;
 import br.com.github.rpg.war.config.MySQLConfig;

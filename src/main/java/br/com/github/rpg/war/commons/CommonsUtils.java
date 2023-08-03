@@ -1,7 +1,7 @@
 package br.com.github.rpg.war.commons;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import br.com.github.rpg.war.constants.Constants;
 

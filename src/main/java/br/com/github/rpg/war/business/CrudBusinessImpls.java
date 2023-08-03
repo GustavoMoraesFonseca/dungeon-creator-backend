@@ -4,11 +4,13 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import br.com.github.rpg.war.bean.GenericBean;
 import br.com.github.rpg.war.command.CrudCommand;
+import br.com.github.rpg.war.exceptions.ConflictException;
+import br.com.github.rpg.war.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,13 +20,12 @@ public class CrudBusinessImpls<Dto> implements ICrudBusiness<Dto> {
 	@Inject
 	CrudCommand<Dto> command;
 	
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
 	@Override
 	public Dto findById(String dtoName, int id) throws Exception {
 		Dto dto = null;
 		try {
 			dto = command.findById(dtoName, id);
+			notFoundChecker((int) dto.getClass().getMethod("getId", null).invoke(dto));
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
@@ -37,6 +38,7 @@ public class CrudBusinessImpls<Dto> implements ICrudBusiness<Dto> {
 		List<Dto> lst = null;
 		try {
 			lst = command.findAll(dtoName);
+			notFoundChecker(lst.size());
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
@@ -45,9 +47,9 @@ public class CrudBusinessImpls<Dto> implements ICrudBusiness<Dto> {
 	}
 
 	@Override
-	public int create(String dtoName, Dto dto) throws Exception {
-		String date = sdf.format(new Timestamp(System.currentTimeMillis()));
+	public int create(String dtoName, Dto dto) throws ConflictException, Exception {
 		GenericBean<Dto> bean = new GenericBean<>();
+		String date = getDate();
 		int id = 0;
 		try {
 			bean.setDto(dto);
@@ -62,30 +64,37 @@ public class CrudBusinessImpls<Dto> implements ICrudBusiness<Dto> {
 	}
 
 	@Override
-	public int update(String dtoName, Dto dto) throws Exception {
-		String date = sdf.format(new Timestamp(System.currentTimeMillis()));
+	public void update(String dtoName, Dto dto) throws ConflictException, NotFoundException, Exception {
 		GenericBean<Dto> bean = new GenericBean<>();
-		int retorno = 0;
 		try {
 			bean.setDto(dto);
-			bean.setDataAtualizacao(date);
-			retorno = command.update(dtoName, bean);
+			bean.setDataAtualizacao(getDate());
+			int affectedRows = command.update(dtoName, bean);
+			notFoundChecker(affectedRows);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
 		}
-		return retorno;
 	}
 
 	@Override
-	public int delete(String dtoName, int id) throws Exception {
-		int retorno = 0;
+	public void delete(String dtoName, int id) throws NotFoundException, Exception {
 		try {
-			retorno = command.delete(dtoName, id);
+			int affectedRows = command.delete(dtoName, id);
+			notFoundChecker(affectedRows);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
 		}
-		return retorno;
+	}
+	
+	private static String getDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(new Timestamp(System.currentTimeMillis()));
+	}
+	
+	private void notFoundChecker(int paramForCheck) throws NotFoundException {
+		if (paramForCheck == 0)
+			throw new NotFoundException();
 	}
 }
