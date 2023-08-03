@@ -10,9 +10,7 @@ import javax.inject.Inject;
 import br.com.github.rpg.war.bean.GenericBean;
 import br.com.github.rpg.war.config.MySQLConfig;
 import br.com.github.rpg.war.dao.ICrudDAO;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @ApplicationScoped
 public class CrudCommand<Dto> {
 	
@@ -27,7 +25,6 @@ public class CrudCommand<Dto> {
 			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
-			log.error(e.getMessage());
 			throw e;
 		} finally {
 			conn.close();
@@ -40,9 +37,6 @@ public class CrudCommand<Dto> {
 		Dto dto;
 		try {
 			dto = crudDAOImpls.findById(dtoName, conn, id);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
 		} finally {
 			conn.close();
 		}
@@ -54,9 +48,6 @@ public class CrudCommand<Dto> {
 		List<Dto> lst = new ArrayList<Dto>();
 		try {
 			lst = crudDAOImpls.findAll(dtoName, conn);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
 		} finally {
 			conn.close();
 		}
@@ -71,7 +62,6 @@ public class CrudCommand<Dto> {
 			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
-			log.error(e.getMessage());
 			throw e;
 		} finally {
 			conn.close();
@@ -87,7 +77,6 @@ public class CrudCommand<Dto> {
 			conn.commit();
 		} catch (Exception e) {
 			conn.rollback();
-			log.error(e.getMessage());
 			throw e;
 		} finally {
 			conn.close();

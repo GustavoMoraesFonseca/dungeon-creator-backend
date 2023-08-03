@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MySQLConfig {
 
-	public static Connection getConnection() {
+	public static Connection getConnection() throws Exception {
 		Properties props = new Properties();
 		Connection conn = null;
 		try {
@@ -20,6 +20,7 @@ public class MySQLConfig {
 			conn.setAutoCommit(false);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
+			throw e;
 		}
 		return conn;
 	}
