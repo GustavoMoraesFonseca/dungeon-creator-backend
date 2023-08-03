@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.github.rpg.war.bean.GenericBean;
 import br.com.github.rpg.war.dao.helper.CrudDAOHelper;
-import lombok.extern.slf4j.Slf4j;
+import br.com.github.rpg.war.exceptions.ConflictException;
 
-@Slf4j
 @ApplicationScoped
 public class CrudDAOJdbc<Dto> extends CrudDAOHelper<Dto> implements ICrudDAO<Dto> {
 	
@@ -47,8 +47,9 @@ public class CrudDAOJdbc<Dto> extends CrudDAOHelper<Dto> implements ICrudDAO<Dto
 			}
 			rs.close();
 			ps.close();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new ConflictException(e.getMessage());
 		} catch (Exception e) {
-			log.error(e.getMessage());
 			throw e;
 		}
 		return id;
@@ -56,52 +57,34 @@ public class CrudDAOJdbc<Dto> extends CrudDAOHelper<Dto> implements ICrudDAO<Dto
 
 	@Override
 	public Dto findById(String dtoName, Connection conn, int id) throws Exception {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Dto dtoInstance = null;
-		try {
-			dtoInstance = getDtoInstance(dtoName);
+		Dto dtoInstance = getDtoInstance(dtoName);
+		PreparedStatement ps = conn.prepareStatement(getSelectSQL(dtoInstance, true));
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
 			
-			ps = conn.prepareStatement(getSelectSQL(dtoInstance, true));
-			ps.setInt(1, id);
-			rs = ps.executeQuery();
-			
-			if (rs.next()) {
-				resultSetterInObj(dtoInstance, getDtoFields(dtoInstance), rs);
-			}
-			rs.close();
-			ps.close();
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
+		if (rs.next()) {
+			resultSetterInObj(dtoInstance, getDtoFields(dtoInstance), rs);
 		}
+		rs.close();
+		ps.close();
 		return dtoInstance;
 	}
 	
 	@Override
 	public List<Dto> findAll(String dtoName, Connection conn) throws Exception {
 		List<Dto> lst = new ArrayList<>();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Dto dtoInstance = null;
-		try {
+		Dto dtoInstance = getDtoInstance(dtoName);
+		PreparedStatement ps = conn.prepareStatement(getSelectSQL(dtoInstance, false));
+		ResultSet rs = ps.executeQuery();
+			
+		while (rs.next()) {
 			dtoInstance = getDtoInstance(dtoName);
-			
-			ps = conn.prepareStatement(getSelectSQL(dtoInstance, false));
-			rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				dtoInstance = getDtoInstance(dtoName);
-				resultSetterInObj(dtoInstance, getDtoFields(dtoInstance), rs);
-				lst.add(dtoInstance);
-				dtoInstance = null;				
-			}
-			rs.close();
-			ps.close();
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
+			resultSetterInObj(dtoInstance, getDtoFields(dtoInstance), rs);
+			lst.add(dtoInstance);
+			dtoInstance = null;
 		}
+		rs.close();
+		ps.close();
 		return lst;
 	}
 
@@ -131,8 +114,9 @@ public class CrudDAOJdbc<Dto> extends CrudDAOHelper<Dto> implements ICrudDAO<Dto
 			retorno = ps.executeUpdate();
 			
 			ps.close();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new ConflictException(e.getMessage());
 		} catch (Exception e) {
-			log.error(e.getMessage());
 			throw e;
 		}
 		return retorno;
@@ -140,17 +124,11 @@ public class CrudDAOJdbc<Dto> extends CrudDAOHelper<Dto> implements ICrudDAO<Dto
 
 	@Override
 	public int delete(String dtoName, Connection conn, int id) throws Exception {
-		PreparedStatement ps = null;
 		int retorno = 0;
-		try {
-			ps = conn.prepareStatement(getDeleteSQL(getDtoInstance(dtoName)));
-			ps.setInt(1, id);
-			retorno = ps.executeUpdate();
-			ps.close();
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
-		}
+		PreparedStatement ps = conn.prepareStatement(getDeleteSQL(getDtoInstance(dtoName)));
+		ps.setInt(1, id);
+		retorno = ps.executeUpdate();
+		ps.close();
 		return retorno;
 	}
 }
