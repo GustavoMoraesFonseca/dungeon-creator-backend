@@ -16,7 +16,7 @@ public class MySQLConfig {
 		try {
 			props.put("user", "war-user");
 			props.put("password", "War@User");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/rpg_war?allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull", props);
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dungeon_creator?allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull", props);
 			conn.setAutoCommit(false);
 		} catch (SQLException e) {
 			log.error(e.getMessage());

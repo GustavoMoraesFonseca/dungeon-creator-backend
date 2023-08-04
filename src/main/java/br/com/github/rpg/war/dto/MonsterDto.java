@@ -17,6 +17,14 @@ public class MonsterDto implements Serializable {
 	
 	private int id;
 	private String name;
+	private double level;
+	private int page;
 	private int biomeId;
-	private String craft;
+	private int bookId;
+	private int monsterTypeId;
+	private boolean existsSouth;
+	private boolean existsNorth;
+	private boolean existsCenter;
+	private boolean existsWest;
+	private boolean existsEast;
 }

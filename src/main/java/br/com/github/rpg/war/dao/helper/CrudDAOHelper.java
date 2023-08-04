@@ -25,7 +25,7 @@ public abstract class CrudDAOHelper<Dto> {
 		List<String> dtoFields = new ArrayList<>();
 		getGetters(dto).forEach(
 			m -> {
-				char c[] = m.getName().substring(3).toCharArray();
+				char c[] = getIndexStartPropertyName(m.getName()).toCharArray();
 				c[0] = Character.toLowerCase(c[0]);
 				dtoFields.add(new String(c));
 			}
@@ -73,7 +73,10 @@ public abstract class CrudDAOHelper<Dto> {
 	}
 
 	protected List<Method> getGetters(Dto dto) {
-		Comparator<Method> comparator = Comparator.comparing(Method::getName);
+		Comparator<Method> comparator = Comparator.comparing(
+			Method::getName,
+			(name1, name2) -> getIndexStartPropertyName(name1).compareTo(getIndexStartPropertyName(name2))
+        );
 		List<Method> getters;		
 		getters = Arrays.stream(dto.getClass().getMethods()).filter(
 			m -> !m.getName().equals("getClass") && m.getName().substring(0,3).equals("get") || m.getName().substring(0,2).equals("is")
@@ -105,5 +108,9 @@ public abstract class CrudDAOHelper<Dto> {
 			sb.append("_"+fields[i]);
 		}
 		return sb.toString().toLowerCase();
+	}
+	
+	private String getIndexStartPropertyName(String str) {
+		return str.substring(str.startsWith("is")? 2 : 3);
 	}
 }

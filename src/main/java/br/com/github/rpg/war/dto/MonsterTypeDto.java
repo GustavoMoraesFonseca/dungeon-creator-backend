@@ -11,11 +11,11 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class InventoryResourceDto implements Serializable {
+public class MonsterTypeDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
-	private int playerId;
-	private int resourceId;
+	private String name;
+	private String description;
 }

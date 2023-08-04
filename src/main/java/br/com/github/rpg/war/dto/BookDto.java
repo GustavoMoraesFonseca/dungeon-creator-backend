@@ -11,16 +11,10 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class AreaDto implements Serializable {
+public class BookDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
 	private String name;
-	private int biomeId;
-	private int championId;
-	private int level;
-	private String defences;
-	private int soldados;
-	private boolean isDominated;
 }

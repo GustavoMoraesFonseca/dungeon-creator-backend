@@ -11,9 +11,13 @@ public class CommonsUtils {
 		return Response.ok(new ResponseDto(obj, null)).build();
 	}
 	
+	public static Response created(int id) {
+		return Response.status(Status.CREATED).entity(new ResponseDto(id, null)).build();
+	}
+	
 	public static Response notFound() {
 		return Response.status(Status.NOT_FOUND).entity(
-				new ResponseDto(null, Constants.NOT_FOUND_MSG)
+				new ResponseDto(Constants.NOT_FOUND_MSG, null)
 			).build();
 	}
 	
