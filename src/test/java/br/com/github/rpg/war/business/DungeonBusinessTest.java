@@ -4,19 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import br.com.github.rpg.war.bean.GenericBean;
-import br.com.github.rpg.war.command.CrudCommand;
-import br.com.github.rpg.war.dto.BookDto;
+import br.com.github.dungeon.creator.bean.GenericBean;
+import br.com.github.dungeon.creator.command.CrudCommand;
+import br.com.github.dungeon.creator.dto.BookDto;
 import io.quarkus.test.junit.QuarkusMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 
+@QuarkusTest
 public class DungeonBusinessTest {
 	
 	@Inject

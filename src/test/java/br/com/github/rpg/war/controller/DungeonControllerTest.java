@@ -11,33 +11,32 @@ import static org.mockito.Mockito.when;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import br.com.github.rpg.war.business.CrudBusinessImpls;
-import br.com.github.rpg.war.constants.Constants;
-import br.com.github.rpg.war.dto.BookDto;
-import br.com.github.rpg.war.exceptions.ConflictException;
-import br.com.github.rpg.war.exceptions.NotFoundException;
+import br.com.github.dungeon.creator.business.CrudBusinessImpls;
+import br.com.github.dungeon.creator.constants.Constants;
+import br.com.github.dungeon.creator.dto.BookDto;
+import br.com.github.dungeon.creator.exceptions.ConflictException;
+import br.com.github.dungeon.creator.exceptions.NotFoundException;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
 
 @QuarkusTest
 public class DungeonControllerTest {
 	
-	@Inject
-	CrudBusinessImpls<BookDto> crudBusiness;
+    @Inject
+    CrudBusinessImpls<BookDto> crudBusinessMock;
 	
     @BeforeEach
     public void setup() {
-        crudBusiness = mock(CrudBusinessImpls.class);
-        QuarkusMock.installMockForType(crudBusiness, CrudBusinessImpls.class);
+        crudBusinessMock = mock(CrudBusinessImpls.class);
+        QuarkusMock.installMockForType(crudBusinessMock, CrudBusinessImpls.class);
     }
     
     @Nested
@@ -50,7 +49,7 @@ public class DungeonControllerTest {
     		BookDto requestBody = new BookDto(); 
     		requestBody.setName("Book");
     		
-    		when(crudBusiness.create(Mockito.anyString(), Mockito.any(BookDto.class)))
+    		when(crudBusinessMock.create(Mockito.anyString(), Mockito.any(BookDto.class)))
     			.thenReturn(1);
     		
     		given()
@@ -70,7 +69,7 @@ public class DungeonControllerTest {
     		BookDto requestBody = new BookDto(); 
     		requestBody.setName("Book");
     		
-    		when(crudBusiness.create(Mockito.anyString(), Mockito.any(BookDto.class)))
+    		when(crudBusinessMock.create(Mockito.anyString(), Mockito.any(BookDto.class)))
     			.thenThrow(new ConflictException("Já cadastrado"));
     		
     		given()
@@ -90,7 +89,7 @@ public class DungeonControllerTest {
     		BookDto requestBody = new BookDto(); 
     		requestBody.setName("Book");
     		
-    		when(crudBusiness.create(Mockito.anyString(), Mockito.any(BookDto.class)))
+    		when(crudBusinessMock.create(Mockito.anyString(), Mockito.any(BookDto.class)))
     			.thenThrow(new SQLException("Erro ao se conectar ao Banco"));
     		
     		given()
@@ -116,7 +115,7 @@ public class DungeonControllerTest {
         	requestBody.setId(1);
         	requestBody.setName("New Book");
         	
-        	doNothing().when(crudBusiness).update(Mockito.anyString(), Mockito.any(BookDto.class));
+        	doNothing().when(crudBusinessMock).update(Mockito.anyString(), Mockito.any(BookDto.class));
         	
         	given()
               .when()
@@ -137,7 +136,7 @@ public class DungeonControllerTest {
     		requestBody.setName("Book");
     		
     		doThrow(new ConflictException("Já cadastrado"))
-    		    .when(crudBusiness).update(Mockito.anyString(), Mockito.any(BookDto.class));
+    		    .when(crudBusinessMock).update(Mockito.anyString(), Mockito.any(BookDto.class));
     		
     		given()
     			.when()
@@ -158,7 +157,7 @@ public class DungeonControllerTest {
     		requestBody.setName("Other Book");
     		
     		doThrow(NotFoundException.class)
-    		    .when(crudBusiness).update(Mockito.anyString(), Mockito.any(BookDto.class));
+    		    .when(crudBusinessMock).update(Mockito.anyString(), Mockito.any(BookDto.class));
     		
     		given()
     			.when()
@@ -179,7 +178,7 @@ public class DungeonControllerTest {
     		requestBody.setName("Book");
     		
     		doThrow(new SQLException("Erro ao se conectar ao Banco"))
-		    	.when(crudBusiness).update(Mockito.anyString(), Mockito.any(BookDto.class));
+		    	.when(crudBusinessMock).update(Mockito.anyString(), Mockito.any(BookDto.class));
     		
     		given()
     			.when()
@@ -203,7 +202,7 @@ public class DungeonControllerTest {
         	expectedFindByIdReturn.setId(1);
         	expectedFindByIdReturn.setName("Book");
         	
-            when(crudBusiness.findById(Mockito.anyString(), Mockito.anyInt()))
+            when(crudBusinessMock.findById(Mockito.anyString(), Mockito.anyInt()))
         		.thenReturn(expectedFindByIdReturn);
         	
         	given()
@@ -220,7 +219,7 @@ public class DungeonControllerTest {
     	@Test
     	@DisplayName("Quando chamar o Find By id, deve retornar Not Found")
     	public void whenCallFindBookById_thenReturnNotFound() throws Exception {
-            when(crudBusiness.findById(Mockito.anyString(), Mockito.anyInt()))
+            when(crudBusinessMock.findById(Mockito.anyString(), Mockito.anyInt()))
         		.thenThrow(NotFoundException.class);
     		
     		given()
@@ -236,7 +235,7 @@ public class DungeonControllerTest {
     	@Test
     	@DisplayName("Quando chamar o Find By id, deve retornar Internal Server Error")
     	public void whenCallFindBookById_thenReturnInternalServerError() throws Exception {
-            when(crudBusiness.findById(Mockito.anyString(), Mockito.anyInt()))
+            when(crudBusinessMock.findById(Mockito.anyString(), Mockito.anyInt()))
         		.thenThrow(new SQLException("Erro ao conectar com o Banco"));
     		
     		given()
@@ -266,7 +265,7 @@ public class DungeonControllerTest {
         	
         	List<BookDto> expectedFindAllReturn = List.of(expectedFisrtItemReturn, expectedSecondItemReturn);
         	
-            when(crudBusiness.findAll(Mockito.anyString()))
+            when(crudBusinessMock.findAll(Mockito.anyString()))
         		.thenReturn(expectedFindAllReturn);
         	
         	given()
@@ -284,7 +283,7 @@ public class DungeonControllerTest {
     	@Test
     	@DisplayName("Quando chamar o Find All, deve retornar Not Found")
     	public void whenCallFindAllBooks_thenReturnNotFound() throws Exception {
-            when(crudBusiness.findAll(Mockito.anyString()))
+            when(crudBusinessMock.findAll(Mockito.anyString()))
         		.thenThrow(NotFoundException.class);
     		
     		given()
@@ -299,7 +298,7 @@ public class DungeonControllerTest {
     	@Test
     	@DisplayName("Quando chamar o Find All, deve retornar Internal Server Error")
     	public void whenCallFindAllBooks_thenReturnInternalServerError() throws Exception {
-            when(crudBusiness.findAll(Mockito.anyString()))
+            when(crudBusinessMock.findAll(Mockito.anyString()))
         		.thenThrow(new SQLException("Erro ao conectar com o Banco"));
     		
     		given()
@@ -318,7 +317,7 @@ public class DungeonControllerTest {
         @Test
         @DisplayName("Quando chamar o Delete, deve retornar Sucesso")
         public void whenCallDeleteBook_thenReturnOk() throws Exception {
-        	doNothing().when(crudBusiness).delete(Mockito.anyString(), Mockito.anyInt());
+        	doNothing().when(crudBusinessMock).delete(Mockito.anyString(), Mockito.anyInt());
         	
         	given()
               .when()
@@ -338,7 +337,7 @@ public class DungeonControllerTest {
     		requestBody.setName("Other Book");
     		
     		doThrow(NotFoundException.class)
-    		    .when(crudBusiness).delete(Mockito.anyString(), Mockito.anyInt());
+    		    .when(crudBusinessMock).delete(Mockito.anyString(), Mockito.anyInt());
     		
     		given()
     			.when()
@@ -358,7 +357,7 @@ public class DungeonControllerTest {
     		requestBody.setName("Book");
     		
     		doThrow(new SQLException("Erro ao se conectar ao Banco"))
-    	    	.when(crudBusiness).delete(Mockito.anyString(), Mockito.anyInt());
+    	    	.when(crudBusinessMock).delete(Mockito.anyString(), Mockito.anyInt());
     		
     		given()
     			.when()
