@@ -1,0 +1,13 @@
+[{"id":1, "name":"Elemental", "description":"O elemental \u00e9 um conjunto de v\u00e1rios tipos de criaturas, seres m\u00e1gicos vivos feitos de um \u00fanico elemento e nativos de outros planos.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":2, "name":"Gigante", "description":"Criaturas enormes e intimidadoras", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":3, "name":"Humanoide", "description":"Criaturas b\u00edpedes de corpo ereto.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":4, "name":"\u00cdnfero", "description":"Criaturas demon\u00edacas que vivem no Inferno", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":5, "name":"Constructo", "description":"Constru\u00e7\u00e3o puramente mental, criada a partir de elementos mais simples, para ser parte de uma teoria.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":6, "name":"Monstruosidade", "description":"Criaturas apavorantes que n\u00e3o s\u00e3o comuns, nem verdadeiramente naturais e quase nunca benignos.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":7, "name":"Gosma", "description":"Criaturas \u00e1cidas e transpar\u00eantes.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":8, "name":"Aberra\u00e7\u00e3o", "description":"Criaturas profundamente alien\u00edgenas. Muitas delas possuem habilidades m\u00e1gicas inatas que vem da mente alien\u00edgena da criaturas e n\u00e3o das formas m\u00edsticas do mundo", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":9, "name":"Planta", "description":"Criaturas que se assemelham a \u00e1rvores e vivem em florestas", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":10, "name":"Morto-vivo", "description":"Criaturas mortas, mas por alguma intera\u00e7\u00e3o anormal continua viva", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":11, "name":"Fe\u00e9rico", "description":"Criaturas fantasiosas, guardi\u00f5es da natureza e da magia por excel\u00eancia", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":12, "name":"Celestial", "description":"Criaturas m\u00edsticas que habitam as florestas e s\u00e3o s\u00edmbolos de pureza e inoc\u00eancia.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"},
+ {"id":13, "name":"Drag\u00e3o", "description":"Criaturas drac\u00f3nicas.", "dthr_criacao":"2023-07-27 10:02:55", "dthr_atualizacao":"2023-07-27 10:02:55"}]
