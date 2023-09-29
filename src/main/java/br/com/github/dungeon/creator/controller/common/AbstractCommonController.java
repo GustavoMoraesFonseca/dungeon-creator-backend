@@ -6,6 +6,10 @@ import static br.com.github.dungeon.creator.commons.CommonsUtils.notFound;
 import static br.com.github.dungeon.creator.commons.CommonsUtils.ok;
 import static br.com.github.dungeon.creator.commons.CommonsUtils.serverError;
 
+import java.time.LocalDateTime;
+
+import static br.com.github.dungeon.creator.commons.CommonsUtils.registerTrace;
+
 import br.com.github.dungeon.creator.business.CrudBusinessImpls;
 import br.com.github.dungeon.creator.exceptions.ConflictException;
 import br.com.github.dungeon.creator.exceptions.NotFoundException;
@@ -31,6 +35,7 @@ public abstract class AbstractCommonController<Dto> {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") int id) {
+    	LocalDateTime dtHrStart = LocalDateTime.now();
     	Response response = null;
     	try {
 			var obj = business.findById(getDtoName(), id);
@@ -39,12 +44,15 @@ public abstract class AbstractCommonController<Dto> {
     		response = notFound();
     	} catch (Exception e) {
 			response = serverError(e.getMessage());
+		} finally {
+			registerTrace(dtHrStart, response.getStatus(), "Find By Id "+getDtoName());
 		}
         return response;
     }
     
     @GET
     public Response findAll() {
+    	LocalDateTime dtHrStart = LocalDateTime.now();
     	Response response = null;
     	try {
 			var lst = business.findAll(getDtoName());
@@ -53,12 +61,15 @@ public abstract class AbstractCommonController<Dto> {
     		response = notFound();
 		} catch (Exception e) {
 			response = serverError(e.getMessage());
+		} finally {
+			registerTrace(dtHrStart, response.getStatus(), "Find All "+getDtoName());
 		}
         return response;
     }
     
     @POST
     public Response create(Dto dto) {
+    	LocalDateTime dtHrStart = LocalDateTime.now();
     	Response response = null;
     	try {
     		int id = business.create(getDtoName(), dto);
@@ -67,12 +78,15 @@ public abstract class AbstractCommonController<Dto> {
     		response = conflict(e.getMessage());
 		} catch (Exception e) {
 			response = serverError(e.getMessage());
+		} finally {
+			registerTrace(dtHrStart, response.getStatus(), "Create "+getDtoName());
 		}
     	return response;
     }
     
     @PUT
     public Response update(Dto dto) {
+    	LocalDateTime dtHrStart = LocalDateTime.now();
     	Response response = null;
     	try {
     		business.update(getDtoName(), dto);
@@ -83,6 +97,8 @@ public abstract class AbstractCommonController<Dto> {
     		response = notFound();
     	} catch (Exception e) {
 			response = serverError(e.getMessage());
+		} finally {
+			registerTrace(dtHrStart, response.getStatus(), "Update "+getDtoName());
 		}
     	return response;
     }
@@ -90,6 +106,7 @@ public abstract class AbstractCommonController<Dto> {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") int id) {
+    	LocalDateTime dtHrStart = LocalDateTime.now();
     	Response response = null;
     	try {
     		business.delete(getDtoName(), id);
@@ -98,6 +115,8 @@ public abstract class AbstractCommonController<Dto> {
     		response = notFound();
 		} catch (Exception e) {
 			response = serverError(e.getMessage());
+		} finally {
+			registerTrace(dtHrStart, response.getStatus(), "Delete "+getDtoName());
 		}
     	return response;
     }

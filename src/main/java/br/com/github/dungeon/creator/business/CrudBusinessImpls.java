@@ -1,5 +1,7 @@
 package br.com.github.dungeon.creator.business;
 
+import static br.com.github.dungeon.creator.commons.CommonsUtils.notFoundChecker;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -90,10 +92,5 @@ public class CrudBusinessImpls<Dto> implements ICrudBusiness<Dto> {
 	private static String getDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(new Timestamp(System.currentTimeMillis()));
-	}
-	
-	private void notFoundChecker(int paramForCheck) throws NotFoundException {
-		if (paramForCheck == 0)
-			throw new NotFoundException();
 	}
 }

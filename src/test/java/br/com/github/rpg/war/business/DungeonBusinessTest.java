@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -42,6 +43,7 @@ public class DungeonBusinessTest {
     			.thenReturn(1);
     		
     		assertEquals(expectedReturn, 1);
+    		Assertions.assertInstanceOf(Integer.class, expectedReturn);
     	}
     }
 }
